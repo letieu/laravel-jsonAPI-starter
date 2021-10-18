@@ -1,0 +1,29 @@
+version: "3.9"
+
+services:
+  nginx:
+    image: nginx:stable
+    ports:
+      - "8008:80"
+    volumes:
+      - ./nginx:/etc/nginx/templates
+      - ./src:/var/www
+  php:
+    build: .
+    volumes:
+      - /var/www/vendor/
+      - /var/www/storage/app
+      - /var/www/storage/framework
+      - /var/www/storage/logs
+      - /var/www/bootstrap/cache/
+      - ./src:/var/www
+
+  mysql:
+    image: mysql:latest
+    environment:
+      - MYSQL_ROOT_PASSWORD=secret
+      - MYSQL_DATABASE=laravel
+    ports:
+      - "8009:3306"
+    volumes:
+      - "./data/db/mysql:/var/lib/mysql"
